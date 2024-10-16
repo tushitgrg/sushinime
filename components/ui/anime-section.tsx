@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { AnimeDetails } from "../anime-id-page"
 import AnimeCard from "./anime-card"
 import { Dialog, DialogContent, DialogTitle } from "./dialog"
@@ -27,7 +27,7 @@ export const AnimeModal = ({ anime, isOpen, onClose,episodeid=null }) => {
 
   
 export const AnimeSection = ({ title, type, passinganime }) =>{
-
+  const scrollContainerRef = useRef(null);
     const router = useRouter();
     const pathname = usePathname();
     const [animedata,setanimedata] = useState(null)
@@ -86,6 +86,23 @@ if(type=='Romance') link='https://sushinimeapi.vercel.app/meta/anilist/advanced-
           },[])
     
   }
+  const scrollLeft = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({
+        left: -300, // Adjust the scroll amount
+        behavior: 'smooth',
+      });
+    }
+  };
+
+  const scrollRight = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({
+        left: 300, // Adjust the scroll amount
+        behavior: 'smooth',
+      });
+    }
+  };
   const searchParams = useSearchParams(); // Get current search parameters
 
   const currentParams = new URLSearchParams(searchParams);
@@ -95,8 +112,8 @@ if(type=='Romance') link='https://sushinimeapi.vercel.app/meta/anilist/advanced-
     <section className="mb-12">
       <h2 className="text-2xl font-bold mb-4">{title}</h2>
   <div className="flex   items-center">
-      <Badge className="bg-black hidden md:block">   <ArrowBigLeft size={24}/>    </Badge>
-      <div className="flex  overflow-x-scroll gap-4">
+      <Badge onClick={scrollLeft} className="bg-black hidden md:block">   <ArrowBigLeft size={24}/>    </Badge>
+      <div ref={scrollContainerRef} className="flex  overflow-x-scroll gap-4">
     
       
     { animedata &&animedata.length>0 ? animedata.map((anime, index) => (
@@ -119,7 +136,7 @@ if(type=='Romance') link='https://sushinimeapi.vercel.app/meta/anilist/advanced-
     )): [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15].map((i)=><Skeleton key={i} className="min-w-[50%] max-w-[50%] md:min-w-[33.33%] md:max-w-[33.33%] lg:min-w-[16.66%] h-64 bg-slate-900 lg:max-w-[16.66%] rounded-xl" />)}
   
   </div>
-  <Badge className="bg-black hidden md:block">    <ArrowBigRight size={24}/>    </Badge>
+  <Badge onClick={scrollRight} className="bg-black hidden md:block">    <ArrowBigRight size={24}/>    </Badge>
   </div>
     </section>
   )}
