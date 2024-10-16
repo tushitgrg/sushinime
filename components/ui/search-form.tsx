@@ -55,7 +55,7 @@ const SearchForm = () => {
     }} className="text-gray-300 hover:text-white block sm:hidden md:hidden transition-colors cursor-pointer " />
     <div className="flex items-center space-x-2 cursor-pointer group" >
       <a href="https://x.com/tushitgargg" target='_blank'>
-      <img src="/mypfp.jpg" alt="User" className="w-8 h-8 rounded" />
+      <img src="/mypfp.png" alt="User" className="w-8 h-8 rounded" />
       </a>
 
       {/* <ChevronDown className="text-white group-hover:rotate-180 transition-transform duration-300" size={16} /> */}
