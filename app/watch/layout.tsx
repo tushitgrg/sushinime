@@ -8,8 +8,8 @@ export const metadata = {
     images: [
       {
         url: '/icon.png', 
-        width: 600,
-        height: 600,
+        width: 50,
+        height: 50,
         alt: 'Logo Alt Text',
       },
     ],
