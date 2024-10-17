@@ -9,6 +9,7 @@ import {  ArrowBigLeft, Menu } from "lucide-react"
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { Skeleton } from './ui/skeleton'
+import { fetchDataRedis } from '@/lib/fetchdata'
 
 
 const EpisodeList = ({ currentEpisode, setCurrentEpisode, animedata,animeid }) =>  (
@@ -45,7 +46,7 @@ const setCurrentEpisode = (e)=>{
  
   if(episodeid){
     const getdata = async ()=>{
-      const response = await axios.get(`https://sushinimeapi.vercel.app/meta/anilist/watch/${episodeid}`)
+      const response = await fetchDataRedis(`https://sushinimeapi.vercel.app/meta/anilist/watch/${episodeid}`)
     
 
     for(let i=0; i<response.data.sources.length; i++){
@@ -72,7 +73,7 @@ const setCurrentEpisode = (e)=>{
 
 
     const getdata = async ()=>{
-        const response = await axios.get(`https://sushinimeapi.vercel.app/meta/anilist/info/${animeid}`)
+        const response = await fetchDataRedis(`https://sushinimeapi.vercel.app/meta/anilist/info/${animeid}`)
        
     setanimedata(response.data)
 

@@ -16,6 +16,21 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 export const metadata: Metadata = {
   title: "Sushinime",
   description: "Watch Anime for free",
+  openGraph: {
+    title: "Sushinime",
+    description: "Watch Anime for free",
+    siteName: 'Sushinime',
+    images: [
+      {
+        url: '/icon.png', 
+        width: 600,
+        height: 600,
+        alt: 'Logo Alt Text',
+      },
+    ],
+    type: 'website',
+
+  }
 };
 
 export default function RootLayout({
