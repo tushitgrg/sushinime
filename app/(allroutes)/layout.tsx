@@ -46,15 +46,18 @@ export default function RootLayout({
     alt="headerlogo"
     className="w-44 font-bold text-red-600"
   /></Link>
-       <Button className="w-full mt-5 p-7">
+    
         
-      <Link href="/" className="hover:text-gray-300 transition-colors">Home</Link></Button>
-      <Button className="w-full mt-5 p-7">
-            <Link href="/genres" className="hover:text-gray-300 transition-colors">Explore</Link></Button>
-            <Button className="w-full mt-5 p-7">
-            <Link href="/recently-updated" className="hover:text-gray-300 transition-colors">Recently Updated</Link></Button>
-            <Button className="w-full mt-5 p-7">
-            <Link href="/trending" className="hover:text-gray-300 transition-colors">Trending</Link></Button>
+      <Link href="/" className="hover:text-gray-300 transition-colors">   <Button className="w-full mt-5 p-7">Home</Button></Link>
+
+
+            <Link href="/genres" className="hover:text-gray-300 transition-colors">      <Button className="w-full mt-5 p-7">Explore</Button></Link>
+
+         
+            <Link href="/recently-updated" className="hover:text-gray-300 transition-colors">   <Button className="w-full mt-5 p-7">Recently Updated</Button></Link>
+
+          
+            <Link href="/trending" className="hover:text-gray-300 transition-colors">  <Button className="w-full mt-5 p-7"> Trending </Button></Link>
       
       </SheetContent>
     </Sheet>
