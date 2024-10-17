@@ -8,6 +8,7 @@ import { Skeleton } from "./skeleton"
 import { ArrowBigLeft, ArrowBigRight } from "lucide-react"
 import { Button } from "./button"
 import { Badge } from "./badge"
+import { fetchDataRedis } from "@/lib/fetchdata"
 
 export const AnimeModal = ({ anime, isOpen, onClose,episodeid=null }) => {
   const [animeid, setanimeid] = useState(anime)
@@ -42,12 +43,12 @@ if(type=='Fantasy') link='https://sushinimeapi.vercel.app/meta/anilist/advanced-
 if(type=='Mystery') link='https://sushinimeapi.vercel.app/meta/anilist/advanced-search?genres=["Mystery"]'   
 if(type=='Romance') link='https://sushinimeapi.vercel.app/meta/anilist/advanced-search?genres=["Romance"]'   
 
-        const response = await axios.get(link)
+        const response = await fetchDataRedis(link)
         if(response.data.results.length>0) {
           setanimedata(response.data.results)
           return
         }
-        const response1 = await axios.get(link)
+        const response1 = await fetchDataRedis(link)
       
         if(response1.data.results.length>0) {
           setanimedata(response1.data.results)

@@ -6,10 +6,11 @@ import axios from 'axios'
 import { Skeleton } from '../skeleton'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
+import { fetchDataRedis } from '@/lib/fetchdata'
 const TrendingCarousel = () => {
     const [trendin,settrendin] = useState(null)
     const getdata = async ()=>{
-        const trend = await axios.get('https://sushinimeapi.vercel.app/meta/anilist/trending?page=1&perPage=10')
+        const trend = await fetchDataRedis('https://sushinimeapi.vercel.app/meta/anilist/trending?page=1&perPage=10')
       
         settrendin(trend.data.results)
     }

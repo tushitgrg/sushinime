@@ -11,6 +11,7 @@ import axios from "axios"
 import EpisodeSection from "./ui/episodes-section"
 import { Skeleton } from "./ui/skeleton"
 import { Badge } from "./ui/badge"
+import { fetchDataRedis } from "@/lib/fetchdata"
 
 
 export function AnimeDetails({animeid,episodeid=null}) {
@@ -18,7 +19,7 @@ export function AnimeDetails({animeid,episodeid=null}) {
   const [videosrc, setvideosrc] = useState({default:null, backup:null})
   if(episodeid){
     const getdata = async ()=>{
-      const response = await axios.get(`https://sushinimeapi.vercel.app/meta/anilist/watch/${episodeid}`)
+      const response = await fetchDataRedis(`https://sushinimeapi.vercel.app/meta/anilist/watch/${episodeid}`)
     for(let i=0; i<response.data.sources.length; i++){
       if(response.data.sources[i].quality=='default'){
         setvideosrc((prev)=>({backup:prev.backup, default:response.data.sources[i].url}))
@@ -43,7 +44,7 @@ const [allbanners, setallbanners] = useState([])
 let banners = []
   const [animedata,setanimedata] = useState(null)
     const getdata = async ()=>{
-        const response = await axios.get(`https://sushinimeapi.vercel.app/meta/anilist/info/${animeidd}`)
+        const response = await fetchDataRedis(`https://sushinimeapi.vercel.app/meta/anilist/info/${animeidd}`)
         if(response.data.artwork){
       for(let i=0; i<response.data.artwork.slice(0,50).length; i++){
         if(response.data.artwork[i].type == 'banner' &&response.data.artwork[i].providerId == 'tvdb'){

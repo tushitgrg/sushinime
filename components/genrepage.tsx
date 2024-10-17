@@ -15,6 +15,7 @@ import { v4 as uuidv4 } from 'uuid';
 import axios from "axios"
 import AnimeCard from "./ui/anime-card"
 import { Skeleton } from "./ui/skeleton"
+import { fetchDataRedis } from "@/lib/fetchdata"
 
 
 
@@ -31,7 +32,7 @@ export default function GenrePage({genre}) {
 
 const getdata = async ()=>{
  
-    const response = await axios.get(`https://sushinimeapi.vercel.app/meta/anilist/advanced-search?page=1&perPage=30${genre?`&genres=["${genre}"]`:''}`)
+    const response = await fetchDataRedis(`https://sushinimeapi.vercel.app/meta/anilist/advanced-search?page=1&perPage=30${genre?`&genres=["${genre}"]`:''}`)
   setanimedata(response.data.results)
   console.log(response.data.results)
 }
