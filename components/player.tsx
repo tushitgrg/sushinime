@@ -4,13 +4,14 @@ import { useEffect, useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import {  ArrowBigLeft, ArrowBigRight, Menu } from "lucide-react"
+import {  ArrowBigLeft, ArrowBigRight, House, Menu } from "lucide-react"
 
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { Skeleton } from './ui/skeleton'
 import { fetchDataRedis } from '@/lib/fetchdata'
 import Image from 'next/image'
+import Link from 'next/link'
 
 
 const EpisodeList = ({ currentEpisode, setCurrentEpisode, animedata,animeid,setcurrentepn }) =>  (
@@ -113,7 +114,13 @@ getdata()
    {animedata && ( videosrc.backup||videosrc.default) ?  <div className="flex flex-col h-screen bg-black text-white">
     {/* Header */}
     <header className="bg-gray-900 flex items-center justify-between ">
-    <Button variant="default" className='absolute z-10 left-4 top-4'  size="icon" onClick={()=> {router.back();router.back();}} >
+<Link href={'/'}>
+    <Button variant="default" className='absolute z-10 left-4 top-4'  size="icon"  >
+<House size={24}/>
+      
+ </Button>
+ </Link>
+    <Button variant="default" className='absolute z-10 left-14 top-4'  size="icon" onClick={()=> {router.back();router.back();}} >
 
       
       <ArrowBigLeft size={24} />
@@ -124,7 +131,7 @@ getdata()
       <Sheet>
         <SheetTrigger asChild>
           
-          <Button variant="default" className='absolute z-10 left-14 top-4'  size="icon"  >
+          <Button variant="default" className='absolute z-10 left-24 top-4'  size="icon"  >
             <Menu size={24} />
           </Button>
         </SheetTrigger>
