@@ -4,20 +4,23 @@ import { useEffect, useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import {  ArrowBigLeft, Menu } from "lucide-react"
+import {  ArrowBigLeft, ArrowBigRight, Menu } from "lucide-react"
 
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { Skeleton } from './ui/skeleton'
 import { fetchDataRedis } from '@/lib/fetchdata'
+import Image from 'next/image'
 
 
-const EpisodeList = ({ currentEpisode, setCurrentEpisode, animedata,animeid }) =>  (
+const EpisodeList = ({ currentEpisode, setCurrentEpisode, animedata,animeid,setcurrentepn }) =>  (
 
   <div className="">
     <h2 className="text-2xl font-bold mb-4"> {animedata.title.english || animedata.title.romaji}</h2>
     <div className="space-y-2">
-      {animedata.episodes.map((episode) => (
+      {animedata.episodes.map((episode) => {
+
+        return (
         <button
           key={episode.id}
           onClick={() => setCurrentEpisode(episode.id)}
@@ -30,7 +33,7 @@ const EpisodeList = ({ currentEpisode, setCurrentEpisode, animedata,animeid }) =
           <div className="font-semibold">Ep {episode.number}</div>
        
         </button>
-      ))}
+      ) })}
     </div>
   </div>
 )
@@ -38,7 +41,9 @@ const EpisodeList = ({ currentEpisode, setCurrentEpisode, animedata,animeid }) =
 export function AnimePlayer({episodeid,animeid}) {
   const router = useRouter()
 
-
+const [nextep, setnextep] = useState()
+const [currentepn, setcurrentepn] = useState()
+const [prevep, setprevep] = useState()
 const setCurrentEpisode = (e)=>{
   router.push(`/watch/${animeid}/${e}`)
 }
@@ -74,24 +79,48 @@ const setCurrentEpisode = (e)=>{
 
     const getdata = async ()=>{
         const response = await fetchDataRedis(`https://sushinimeapi.vercel.app/meta/anilist/info/${animeid}`)
+
+        for(let i=0; i<response.data.episodes.length; i++){
+          if(response.data.episodes[i].id==episodeid){
+            setcurrentepn(response.data.episodes[i].number)
+          }
+        }
        
     setanimedata(response.data)
+
 
     }
     useEffect(()=>{
 getdata()
     },[])
 
+    useEffect(()=>{
+      if(!animedata) return
+      for(let i=0; i<animedata.episodes.length; i++){
+        console.log(nextep)
+    
+        if(currentepn &&animedata.episodes[i].number -1 == currentepn ){
+          setnextep(animedata.episodes[i].id)
+        }
+        if(currentepn &&animedata.episodes[i].number +1 == currentepn ){
+          setprevep(animedata.episodes[i].id)
+        }
+              }
+    },[currentepn])
+   
   return (
     <div className=''>
    {animedata && ( videosrc.backup||videosrc.default) ?  <div className="flex flex-col h-screen bg-black text-white">
     {/* Header */}
     <header className="bg-gray-900 flex items-center justify-between ">
     <Button variant="default" className='absolute z-10 left-4 top-4'  size="icon" onClick={()=> {router.back();router.back();}} >
+
+      
       <ArrowBigLeft size={24} />
            
           </Button>
-   
+     {nextep?<Button variant="secondary" className='absolute z-10 right-8 bottom-32'   onClick={()=> {setCurrentEpisode(nextep)}} > Next <ArrowBigRight/> </Button>:''}     
+     {prevep?<Button variant="secondary" className='absolute z-10 left-8 bottom-32'   onClick={()=> {setCurrentEpisode(prevep)}} > Prev <ArrowBigLeft/>  </Button>:''}     
       <Sheet>
         <SheetTrigger asChild>
           
@@ -101,7 +130,7 @@ getdata()
         </SheetTrigger>
         <SheetContent side="left" className="w-80 p-0 bg-gray-900 text-white">
           <ScrollArea className="h-full">
-            <EpisodeList animedata={animedata} animeid={animeid} currentEpisode={episodeid}  setCurrentEpisode={setCurrentEpisode} />
+            <EpisodeList  setcurrentepn={setcurrentepn} animedata={animedata} animeid={animeid} currentEpisode={episodeid}  setCurrentEpisode={setCurrentEpisode} />
           </ScrollArea>
         </SheetContent>
       </Sheet>
@@ -117,7 +146,7 @@ getdata()
       
          
          {/* <PlrVideoPlayer hlsSource={videosrc.default||videosrc.backup||''} /> */}
-         <iframe src={ `https://plyr.link/p/player.html#${btoa(videosrc.default||videosrc.backup)}${localStorage.getItem('uid')?`#uid=${localStorage.getItem('uid')}`:''}` } scrolling="no" frameBorder="0" allowFullScreen={true} title={episodeid} allow="picture-in-picture" className="w-screen aspect-video"></iframe>
+         <iframe src={ `https://plyr.link/p/player.html#${btoa(videosrc.default||videosrc.backup)}${localStorage.getItem('uid')?`#uid=${localStorage.getItem('uid')}${episodeid}`:''}` } scrolling="no" frameBorder="0" allowFullScreen={true} title={episodeid} allow="picture-in-picture" className="w-screen aspect-video"></iframe>
            
     
         <div className="flex ">
@@ -126,7 +155,10 @@ getdata()
         </div>
       </div>
     </div>
-  </div>:<Skeleton className='w-screen aspect-video bg-slate-900'/> }
+  </div>: <div className='w-screen h-screen flex align-middle justify-center items-center'>
+<Image src={'/sad-cute.gif'} alt='preloader' width={200} height={200}/>
+
+  </div> }
   </div>
   )
 }
