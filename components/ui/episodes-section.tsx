@@ -67,7 +67,7 @@ useEffect(()=>{
     const router = useRouter()
   return (
     <div> 
-{episodes ? <> <div className='flex justify-between'> <h2 className="text-2xl font-bold mb-4">Episodes</h2>
+{episodes ? <div> {allepisodes.length>0 ? <>  <div className='flex justify-between'> <h2 className="text-2xl font-bold mb-4">Episodes</h2>
 <Select onValueChange={(e)=>setselrange(e)} defaultValue={selrange}>
   <SelectTrigger className="w-[180px]">
     <SelectValue placeholder="Range" />
@@ -106,7 +106,7 @@ useEffect(()=>{
       </div>
     </div>
   </motion.div>
-))} </div></>:    <div className=" grid lg:grid-cols-3 grid-cols-1 md:grid-cols-2 gap-4 ">
+))} </div> </> :'No Episodes yet'} </div> :    <div className=" grid lg:grid-cols-3 grid-cols-1 md:grid-cols-2 gap-4 ">
   {[1,2,3,4,5].map((i)=><Skeleton className='w-full aspect-[2/1] bg-slate-900'></Skeleton>)}
     </div>}
 
