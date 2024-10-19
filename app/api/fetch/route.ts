@@ -29,7 +29,7 @@ if(!apiUrl) return
  console.log('fetching again')
 
     // Cache the new data in Redis with an expiry time (e.g., 1 hour)
-     await redis.set(apiUrl, JSON.stringify(response.data), 'EX', 1200); // 3600 seconds = 1 hour
+     await redis.set(apiUrl, JSON.stringify(response.data), 'EX', 1800); // 3600 seconds = 1 hour
    
    
     return  NextResponse.json(response.data)

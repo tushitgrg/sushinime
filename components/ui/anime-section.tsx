@@ -114,7 +114,7 @@ if(type=='Romance') link='https://sushinimeapi.vercel.app/meta/anilist/advanced-
       <h2 className="text-2xl font-bold mb-4">{title}</h2>
   <div className="flex   items-center">
       <Badge onClick={scrollLeft} className="bg-black hidden md:block">   <ArrowBigLeft size={24}/>    </Badge>
-      <div ref={scrollContainerRef} className="flex  overflow-x-scroll gap-4">
+      <div ref={scrollContainerRef} className="flex w-screen  overflow-x-scroll gap-4">
     
       
     { animedata &&animedata.length>0 ? animedata.map((anime, index) => (
