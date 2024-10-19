@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
@@ -42,6 +42,8 @@ const EpisodeList = ({ currentEpisode, setCurrentEpisode, animedata,animeid,setc
 export function AnimePlayer({episodeid,animeid}) {
   const router = useRouter()
 
+
+ 
 const [nextep, setnextep] = useState()
 const [currentepn, setcurrentepn] = useState()
 const [prevep, setprevep] = useState()
@@ -98,7 +100,7 @@ getdata()
     useEffect(()=>{
       if(!animedata) return
       for(let i=0; i<animedata.episodes.length; i++){
-        console.log(nextep)
+   
     
         if(currentepn &&animedata.episodes[i].number -1 == currentepn ){
           setnextep(animedata.episodes[i].id)
@@ -153,7 +155,7 @@ getdata()
       
          
          {/* <PlrVideoPlayer hlsSource={videosrc.default||videosrc.backup||''} /> */}
-         <iframe src={ `https://plyr.link/p/player.html#${btoa(videosrc.default||videosrc.backup)}${localStorage.getItem('uid')?`#uid=${localStorage.getItem('uid')}${episodeid}`:''}` } scrolling="no" frameBorder="0" allowFullScreen={true} title={episodeid} allow="picture-in-picture" className="w-screen aspect-video"></iframe>
+         <iframe   src={ `https://plyr.link/p/player.html#${btoa(videosrc.default||videosrc.backup)}${localStorage.getItem('uid')?`#uid=${localStorage.getItem('uid')}${episodeid}`:''}` } scrolling="no" frameBorder="0" allowFullScreen={true} title={episodeid} allow="picture-in-picture" className="w-screen aspect-video"></iframe>
            
     
         <div className="flex ">

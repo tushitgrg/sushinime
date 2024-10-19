@@ -21,6 +21,7 @@ export const metadata = {
 
 
 import "@/app/globals.css";
+import { Analytics } from "@vercel/analytics/react";
 export default function RootLayout({
   children,
 }: {
@@ -29,7 +30,7 @@ export default function RootLayout({
   
   return (
     <html lang="en">
-      <head><link rel="icon" href="/favicon.ico" sizes="any" /></head>
+      <head><link rel="icon" href="/favicon.ico" sizes="any" />   <Analytics/></head>
       <body>
       <div className="min-h-screen bg-black text-white">
         {children}
