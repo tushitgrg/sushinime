@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Input } from './input'
 import { BadgePlus, ChevronDown, Link, Search,  } from 'lucide-react'
 import { useRouter } from 'next/navigation'
@@ -8,14 +8,36 @@ import {Sheet, SheetTrigger, SheetContent, SheetClose, SheetDescription, SheetFo
 import { Label } from '@/components/ui/label'
 
 const SearchForm = () => {
+ const [dvalue, setdvalue] = useState('')
   const router = useRouter()
   const [searchq, setsearchq] = useState('')
+
   const handlesubmit = (e)=>{
     e.preventDefault()
     if(searchq)  router.push(`/search?query=${searchq}`, )
-   
-
   }
+  const handlechange = (e)=>{
+ 
+    setsearchq(e.target.value)
+   
+   
+  }
+
+  useEffect(()=>{
+const counter = setTimeout(() => {
+  setdvalue(searchq)
+}, 200);
+
+return ()=>{
+  clearTimeout(counter)
+}
+  },[searchq])
+
+
+  useEffect(()=>{
+    if(dvalue)  router.push(`/search?query=${dvalue}`, )
+  },[dvalue])
+
   return (
     <div className="flex items-center space-x-4 ">
 {/*            
@@ -42,7 +64,7 @@ const SearchForm = () => {
       <Input
         type="search"
     value={searchq}
-    onChange={(e)=>setsearchq(e.target.value)}
+    onChange={handlechange}
         placeholder="Search"
         className="pl-10 pr-4 py-2 bg-black/60 text-white rounded-full focus:outline-none focus:ring-2 focus:ring-red-600 w-40   md:w-64 transition-all duration-300 md:focus:w-80"
       />
