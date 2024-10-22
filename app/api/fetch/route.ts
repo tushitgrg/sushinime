@@ -14,22 +14,31 @@ if(!apiUrl) return
   
   try {
 
-     const cachedData = await redis.get(apiUrl);
+    
+      const cachedData = await redis.get(apiUrl);
    
 
-    if (cachedData) {
-      console.log('Returning cached data');
-
-    return  NextResponse.json(JSON.parse( cachedData))
-    // Return cached data
-    }
+      if (cachedData) {
+        console.log('Returning cached data');
+  
+      return  NextResponse.json(JSON.parse(cachedData))
+      // Return cached data
+      }
+    
+    
 
     // If no cached data, fetch from external API
     const response = await axios.get(apiUrl);
  console.log('fetching again')
 
     // Cache the new data in Redis with an expiry time (e.g., 1 hour)
-     await redis.set(apiUrl, JSON.stringify(response.data), 'EX', 1800); // 3600 seconds = 1 hour
+
+    try{
+      await redis.set(apiUrl, JSON.stringify(response.data), 'EX', 1800);
+    }
+    catch(e){
+      console.log(e)
+    }
    
    
     return  NextResponse.json(response.data)

@@ -32,16 +32,25 @@ export const AnimeSection = ({ title, type, passinganime }) =>{
     const router = useRouter();
     const pathname = usePathname();
     const [animedata,setanimedata] = useState(null)
-    if(!passinganime){
+   
 
     const getdata = async ()=>{
-        let link = 'https://sushinimeapi.vercel.app/meta/anilist/trending?page=0&perPage=15'
+        let link;
+
+        if(type=='trending') link = 'https://sushinimeapi.vercel.app/meta/anilist/trending?page=0&perPage=15'
         if(type=='updated')link = 'https://sushinimeapi.vercel.app/meta/anilist/recent-episodes?page=0&perPage=20&provider=gogoanime'
 if(type=='Action') link='https://sushinimeapi.vercel.app/meta/anilist/advanced-search?genres=["Action"]'
 if(type=='Comedy') link='https://sushinimeapi.vercel.app/meta/anilist/advanced-search?genres=["Comedy"]'        
 if(type=='Fantasy') link='https://sushinimeapi.vercel.app/meta/anilist/advanced-search?genres=["Fantasy"]'   
 if(type=='Mystery') link='https://sushinimeapi.vercel.app/meta/anilist/advanced-search?genres=["Mystery"]'   
 if(type=='Romance') link='https://sushinimeapi.vercel.app/meta/anilist/advanced-search?genres=["Romance"]'   
+if(type=='MyList'){
+  const response = await axios.get('/api/mylist/get')
+  setanimedata(response.data.animedata) 
+    console.log( response.data.animedata)
+    return
+
+} 
 
         const response = await fetchDataRedis(link)
         if(response.data.results.length>0) {
@@ -69,24 +78,24 @@ if(type=='Romance') link='https://sushinimeapi.vercel.app/meta/anilist/advanced-
           setanimedata(response4.data.results)
           return
         }
+     
 
     }
 
     useEffect(()=>{
+      if(!passinganime){
       try{
         getdata()
       }catch(error){
         console.log(error)
+      }}else{
+        setanimedata(type)
       }
 
     },[])
   
-  }else{
-    useEffect(()=>{
-      setanimedata(type)
-          },[])
-    
-  }
+ 
+
   const scrollLeft = () => {
     if (scrollContainerRef.current) {
       scrollContainerRef.current.scrollBy({
@@ -117,7 +126,7 @@ if(type=='Romance') link='https://sushinimeapi.vercel.app/meta/anilist/advanced-
       <div ref={scrollContainerRef} className="flex w-screen  overflow-x-scroll gap-4">
     
       
-    { animedata &&animedata.length>0 ? animedata.map((anime, index) => (
+    { animedata ? <> {animedata.length>0 ? animedata.map((anime, index) => (
      
        <AnimeCard key={index} anime={anime} onClick={()=> {
 
@@ -134,7 +143,7 @@ if(type=='Romance') link='https://sushinimeapi.vercel.app/meta/anilist/advanced-
        }
     
     } />
-    )): [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15].map((i)=><Skeleton key={i} className="min-w-[50%] max-w-[50%] md:min-w-[33.33%] md:max-w-[33.33%] lg:min-w-[16.66%] h-64 bg-slate-900 lg:max-w-[16.66%] rounded-xl" />)}
+    )):'Nothing to Show here'}</>: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15].map((i)=><Skeleton key={i} className="min-w-[50%] max-w-[50%] md:min-w-[33.33%] md:max-w-[33.33%] lg:min-w-[16.66%] h-64 bg-slate-900 lg:max-w-[16.66%] rounded-xl" />)}
   
   </div>
   <Badge onClick={scrollRight} className="bg-black hidden md:block">    <ArrowBigRight size={24}/>    </Badge>

@@ -1,0 +1,46 @@
+// schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+datasource db {
+  provider  = "postgresql"
+  url  	    = env("DATABASE_URL")
+  // uncomment next line if you use Prisma <5.10
+  // directUrl = env("DATABASE_URL_UNPOOLED")
+}
+
+model User {
+id    String @id @default(uuid())
+  name  String
+  email String @unique
+}
+
+model MyList {
+ id    String @id @default(uuid())
+  animeid  String
+    anime  String
+  email String 
+   @@unique([email, animeid])
+}
+
+model history {
+ id    String @id @default(uuid())
+  animeid  String
+    anime  String
+  episodeid  String
+  email String 
+   @@unique([email, animeid])
+}
+
+model comment {
+   id    String @id @default(uuid())
+  animeid  String
+    episodeid  String
+  email String 
+    name  String
+    avatar String
+    text String
+   createdAt     DateTime  @default(now()) @map(name: "created_at")
+  updatedAt     DateTime  @updatedAt @map(name: "updated_at")
+}

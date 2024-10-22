@@ -10,6 +10,7 @@ import SearchForm from "@/components/ui/search-form";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Analytics } from "@vercel/analytics/react"
+import { Toaster } from "@/components/ui/toaster";
 
 
 
@@ -44,12 +45,12 @@ export default function RootLayout({
           <head><link rel="icon" href="/favicon.ico" sizes="any" /></head>
       <body
         className={` antialiased `}
-      >
+      >   <Toaster />
         <Analytics/> 
         <div className="min-h-screen bg-black text-white">
          <header className={`fixed top-0 w-full z-50 transition-all duration-500  bg-black`}>
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-         <div className="flex block sm:block md:hidden items-center ">     
+         <div className="flex  sm:block md:hidden items-center ">     
         <Sheet >
       <SheetTrigger asChild>
         <Button size={'icon'} variant="secondary" ><Menu/> </Button>

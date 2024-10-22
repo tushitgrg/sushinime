@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from "@/components/ui/button"
-import { PlayCircle, Plus, ThumbsUp, Volume2, VolumeX } from "lucide-react"
+import { Loader2, PlayCircle, Plus, ThumbsUp, Volume2, VolumeX } from "lucide-react"
 import Link from "next/link"
 import { motion } from "framer-motion"
 import { useEffect, useState } from "react"
@@ -12,32 +12,25 @@ import EpisodeSection from "./ui/episodes-section"
 import { Skeleton } from "./ui/skeleton"
 import { Badge } from "./ui/badge"
 import { fetchDataRedis } from "@/lib/fetchdata"
+import { toast } from "@/hooks/use-toast"
+import LoginBoundary from "./test/login-boundary"
 
 
 export function AnimeDetails({animeid,episodeid=null}) {
+  const [btnloading, setbtnloading] = useState(false)
+const addtolist = async ()=>{
 
-  const [videosrc, setvideosrc] = useState({default:null, backup:null})
-  if(episodeid){
-    const getdata = async ()=>{
-      const response = await fetchDataRedis(`https://sushinimeapi.vercel.app/meta/anilist/watch/${episodeid}`)
-    for(let i=0; i<response.data.sources.length; i++){
-      if(response.data.sources[i].quality=='default'){
-        setvideosrc((prev)=>({backup:prev.backup, default:response.data.sources[i].url}))
-      }
-      if(response.data.sources[i].quality=='backup'){
-        setvideosrc((prev)=>({default:prev.default, backup:response.data.sources[i].url}))
-  
-              }
-    }
-  
-  
-    
-  
-  }
-  useEffect(()=>{
-  getdata()
-  },[episodeid])
-  }
+  setbtnloading(true)
+  try{  await axios.post('/api/mylist/add',{id:animedata.id, title:animedata.title, image:animedata.image, currentEpisode: animedata.currentEpisode, totalEpisodes:animedata.totalEpisodes})
+toast({title:'Added to List!'})
+}catch(e){
+  console.log(e)
+  toast({title:'Theres some error'})
+}
+
+  setbtnloading(false)
+}
+
   
   const [animeidd, setanimeid] = useState(animeid)
 const [allbanners, setallbanners] = useState([])
@@ -112,10 +105,7 @@ getdata()
  
     
 {animedata?  <main>
-  {videosrc.default||videosrc.backup? <iframe  src={ `https://plyr.link/p/player.html#${btoa(videosrc.default||videosrc.backup)}` } scrolling="no" frameBorder="0" allowFullScreen={true} allow="picture-in-picture" className="w-full h-[70vh]"></iframe>
-     
-
-     : <section className="relative h-[70vh]">
+  <section className="relative h-[70vh]">
      <div className="absolute inset-0 bg-gradient-to-r from-black to-transparent z-10"></div>
   
 <video
@@ -137,27 +127,22 @@ Your browser does not support the video tag.
        >
  {animedata.title.english || animedata.title.romaji}
        </motion.h1>
-{/*        
+       <LoginBoundary fallback={null}>
        <motion.div 
          initial={{ opacity: 0, y: 20 }}
          animate={{ opacity: 1, y: 0 }}
          transition={{ duration: 0.8, delay: 0.2 }}
          className="flex items-center space-x-4"
        >
-         <Button className="bg-white text-black hover:bg-gray-200 transition-colors">
-           <PlayCircle className="mr-2" size={20} />
-           Play
-         </Button>
-         <Button variant="outline" className="border-gray-400 text-gray-300 hover:bg-white/10 transition-colors">
-           <Plus className="mr-2" size={20} />
+        
+         <Button variant="secondary" onClick={()=>addtolist()}>
+          {btnloading? <Loader2 className="mr-2 h-4 w-4 animate-spin" />:      <Plus className="mr-2" size={20} />}
+     
            My List
          </Button>
-         <Button variant="outline" className="border-gray-400 text-gray-300 hover:bg-white/10 transition-colors">
-           <ThumbsUp className="mr-2" size={20} />
-           Rate
-         </Button>
-       </motion.div> */}
-
+     
+       </motion.div> 
+       </LoginBoundary>
 
 
      </div>
@@ -171,7 +156,7 @@ Your browser does not support the video tag.
          {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
        </Button>
      </div> */}
-   </section> }
+   </section> 
        
 
         <section className="container mx-auto px-4 py-12">
@@ -232,8 +217,9 @@ Your browser does not support the video tag.
         <section className="container mx-auto px-4 py-12">
         
   
-          <AnimeSection title="Similar" passinganime={true} type={ animedata.relations.filter((an)=>an.relationType!='ADAPTATION') }/>
-          <AnimeSection title="If You like this, You Might Like" passinganime={true} type={animedata.recommendations}/> 
+        {animedata.relations.filter((an)=>an.relationType!='ADAPTATION').length>0?<AnimeSection title="Similar" passinganime={true} type={ animedata.relations.filter((an)=>an.relationType!='ADAPTATION') }/>:''}  
+        {animedata.recommendations.length>0?   <AnimeSection title="If You like this, You Might Like" passinganime={true} type={animedata.recommendations}/> :''}   
+       
         </section>
       </main>:<main>
         <section className="relative h-[70vh]">

@@ -6,6 +6,8 @@ import { useRouter } from 'next/navigation'
 import { Button } from './button'
 import {Sheet, SheetTrigger, SheetContent, SheetClose, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 import { Label } from '@/components/ui/label'
+import LoginbtnComponent from '../test/loginbutton'
+
 
 const SearchForm = () => {
  const [dvalue, setdvalue] = useState('')
@@ -75,13 +77,7 @@ return ()=>{
 
 
     }} className="text-gray-300 hover:text-white block sm:hidden md:hidden transition-colors cursor-pointer " />
-    <div className="flex items-center space-x-2 cursor-pointer group" >
-      <a href="https://x.com/tushitgargg" target='_blank'>
-      <img src="/mypfp.png" alt="User" className="w-8 h-8 rounded" />
-      </a>
-
-      {/* <ChevronDown className="text-white group-hover:rotate-180 transition-transform duration-300" size={16} /> */}
-    </div>
+   <LoginbtnComponent/>
   </div>
   )
 }

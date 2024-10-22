@@ -12,6 +12,7 @@ import { Skeleton } from './ui/skeleton'
 import { fetchDataRedis } from '@/lib/fetchdata'
 import Image from 'next/image'
 import Link from 'next/link'
+import CommentSection from './ui/comments'
 
 
 const EpisodeList = ({ currentEpisode, setCurrentEpisode, animedata,animeid,setcurrentepn }) =>  (
@@ -90,7 +91,14 @@ const setCurrentEpisode = (e)=>{
         }
        
     setanimedata(response.data)
-
+  
+      try{
+        await axios.post('/api/history/add', {animeid, episodeid, anime:{id:response.data.id, title:response.data.title, image:response.data.image, currentEpisode: response.data.currentEpisode, totalEpisodes:response.data.totalEpisodes}})
+      }catch(e){
+        console.log(e)
+      }
+    
+    
 
     }
     useEffect(()=>{
@@ -145,25 +153,27 @@ getdata()
       </Sheet>
     </header>
 
-    {/* Main content */}
+
     <div className="flex-grow flex w-screen h-screen overflow-auto">
-      {/* Sidebar for larger screens */}
+
     
 
-      {/* Video player and controls */}
+ 
       <div className="flex-grow  flex flex-col">
       
          
-         {/* <PlrVideoPlayer hlsSource={videosrc.default||videosrc.backup||''} /> */}
+     
          <iframe   src={ `https://plyr.link/p/player.html#${btoa(videosrc.default||videosrc.backup)}${localStorage.getItem('uid')?`#uid=${localStorage.getItem('uid')}${episodeid}`:''}` } scrolling="no" frameBorder="0" allowFullScreen={true} title={episodeid} allow="picture-in-picture" className="w-screen aspect-video"></iframe>
            
     
         <div className="flex ">
-          <h2 className="text-xl sm:text-2xl font-bold"> {episodeid.replaceAll('-',' ').toUpperCase()}</h2>
+          <h2 className="text-xl mx-auto sm:text-2xl font-bold">  {animedata.title.english || animedata.title.romaji} Episode {currentepn} </h2>
        
         </div>
+        <CommentSection animeid={animeid} episodeid={episodeid}/>
       </div>
     </div>
+   
   </div>: <div className='w-screen h-screen flex align-middle justify-center items-center'>
 <Image src={'/sad-cute.gif'} alt='preloader' width={200} height={200}/>
 

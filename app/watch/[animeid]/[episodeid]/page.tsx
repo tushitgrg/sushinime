@@ -9,6 +9,7 @@ import { Dialog, DialogContent } from '@/components/ui/dialog'
 import { AnimeDetails } from '@/components/anime-id-page'
 import { AnimePlayer } from '@/components/player'
 import { v4 as uuidv4 } from 'uuid';
+import CommentSection from '@/components/ui/comments'
 const page = () => {
 
 const [current, setcurrent] = useState({default:null, backup:null})
@@ -16,7 +17,10 @@ const params = useParams();
 const {episodeid,animeid} = params
 const router = useRouter()
 
+
 useEffect(()=>{
+
+
   const uid = localStorage.getItem('uid')
   if(!uid){
     
@@ -24,7 +28,10 @@ useEffect(()=>{
   }
     },[])
   return (
+    <>
     <AnimePlayer animeid={animeid} episodeid={episodeid}/>
+
+    </>
   
   )
 }
