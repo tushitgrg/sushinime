@@ -39,7 +39,7 @@ export default function GenresPage() {
             >
               <Link href={`/genres/${genre.name}`} className="block group">
                 <div className="relative aspect-[3/4] rounded-lg overflow-hidden">
-                  <img
+                  <img  onError={(e)=>e.currentTarget.src='/icon.png'}
                     src={genre.image}
                     alt={genre.name}
                     className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"

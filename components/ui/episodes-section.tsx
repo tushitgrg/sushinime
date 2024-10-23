@@ -92,6 +92,7 @@ useEffect(()=>{
         <img
           src={episode.image}
           alt={episode.title}
+          onError={(e)=>e.currentTarget.src='/icon.png'}
           className="w-full aspect-[2/1]  object-cover transition-transform duration-300 group-hover:scale-105"
         />
       

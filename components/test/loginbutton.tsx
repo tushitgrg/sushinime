@@ -25,7 +25,7 @@ export default function LoginbtnComponent() {
 
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-      <Image src={session.user.image} width={100} height={100} alt="User" className="w-8 h-8 rounded" />
+      <Image src={session.user.image}  onError={(e)=>e.currentTarget.src='/icon.png'} width={100} height={100} alt="User" className="w-8 h-8 rounded" />
 
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
