@@ -13,37 +13,26 @@ import { fetchDataRedis } from '@/lib/fetchdata'
 import Image from 'next/image'
 import Link from 'next/link'
 import CommentSection from './ui/comments'
+import EpisodeSection from './ui/episodes-section'
+import EpisodeListx from './ui/episode-list'
 
 
-const EpisodeList = ({ currentEpisode, setCurrentEpisode, animedata,animeid,setcurrentepn }) =>  (
 
-  <div className="">
-    <h2 className="text-2xl font-bold mb-4"> {animedata.title.english || animedata.title.romaji}</h2>
-    <div className="space-y-2">
-      {animedata.episodes.map((episode) => {
-
-        return (
-        <button
-          key={episode.id}
-          onClick={() => setCurrentEpisode(episode.id)}
-          className={`w-1/2 lg:w-1/3 text-left p-2 rounded-md transition-colors ${
-            currentEpisode === episode.id
-              ? 'bg-red-600 text-white'
-              : 'hover:bg-gray-800'
-          }`}
-        >
-          <div className="font-semibold">Ep {episode.number}</div>
-       
-        </button>
-      ) })}
-    </div>
-  </div>
-)
 
 export function AnimePlayer({episodeid,animeid}) {
   const router = useRouter()
+const mainref = useRef(null)
+useEffect(() => {
+  setTimeout(() => {
+    if (mainref.current) {
+      mainref.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',    
+      });
 
-
+    }
+  }, 0); 
+}, []);
  
 const [nextep, setnextep] = useState()
 const [currentepn, setcurrentepn] = useState()
@@ -120,64 +109,38 @@ getdata()
     },[currentepn])
    
   return (
-    <div className=''>
-   {animedata && ( videosrc.backup||videosrc.default) ?  <div className="flex flex-col h-screen bg-black text-white">
-    {/* Header */}
-    <header className="bg-gray-900 flex items-center justify-between ">
-<Link href={'/'}>
-    <Button variant="default" className='absolute z-10 left-4 top-4'  size="icon"  >
-<House size={24}/>
-      
- </Button>
- </Link>
-    <Button variant="default" className='absolute z-10 left-14 top-4'  size="icon" onClick={()=> {router.back();router.back();}} >
-
-      
-      <ArrowBigLeft size={24} />
-           
-          </Button>
-    
-      <Sheet>
-        <SheetTrigger asChild>
-          
-          <Button variant="default" className='absolute z-10 left-24 top-4'  size="icon"  >
-            <Menu size={24} />
-          </Button>
-        </SheetTrigger>
-        <SheetContent side="left" className="w-80 p-0 bg-gray-900 text-white">
-          <ScrollArea className="h-full">
-            <EpisodeList  setcurrentepn={setcurrentepn} animedata={animedata} animeid={animeid} currentEpisode={episodeid}  setCurrentEpisode={setCurrentEpisode} />
-          </ScrollArea>
-        </SheetContent>
-      </Sheet>
-    </header>
+    <div className='' ref={mainref}>
+   {animedata && ( videosrc.backup||videosrc.default) ?  <div className="flex flex-col  bg-black text-white">
+  
 
 
-    <div className="flex-grow flex w-screen h-screen overflow-auto">
+  
 
     
 
  
-      <div className="flex-grow  flex flex-col">
+    
       
          <div className='relative'>
          {nextep?<Button variant="secondary" className='absolute z-10 right-8 bottom-32'   onClick={()=> {setCurrentEpisode(nextep)}} > Next <ArrowBigRight/> </Button>:''}     
          {prevep?<Button variant="secondary" className='absolute z-10 left-8 bottom-32'   onClick={()=> {setCurrentEpisode(prevep)}} > Prev <ArrowBigLeft/>  </Button>:''}     
-         <iframe   src={ `https://plyr.link/p/player.html#${btoa(videosrc.default||videosrc.backup)}${localStorage.getItem('uid')?`#uid=${localStorage.getItem('uid')}${episodeid}`:''}` } scrolling="no" frameBorder="0" allowFullScreen={true} title={episodeid} allow="picture-in-picture" className="w-screen aspect-video"></iframe>
+         <iframe   src={ `https://plyr.link/p/player.html#${btoa(videosrc.default||videosrc.backup)}${localStorage.getItem('uid')?`#uid=${localStorage.getItem('uid')}${episodeid}`:''}` } scrolling="no" frameBorder="0" allowFullScreen={true} title={episodeid} allow="picture-in-picture" className="w-full aspect-video"></iframe>
          </div>
      
        
            
     
-        <div className="flex ">
-          <h2 className="text-xl mx-auto sm:text-2xl font-bold">  {animedata.title.english || animedata.title.romaji} Episode {currentepn} </h2>
+        <div className="flex p-6">
+          <h2 className="text-xl  sm:text-2xl font-bold">  {animedata.title.english || animedata.title.romaji} Episode {currentepn} </h2>
        
         </div>
         <CommentSection animeid={animeid} episodeid={episodeid}/>
-      </div>
-    </div>
+    
+
+
+ 
    
-  </div>: <div className='w-screen h-screen flex align-middle justify-center items-center'>
+  </div>: <div className='w-full h-screen flex align-middle justify-center items-center'>
 <Image src={'/sad-cute.gif'} alt='preloader' width={200} height={200}/>
 
   </div> }

@@ -30,11 +30,13 @@ export default function RootLayout({
   
   return (
     <html lang="en">
-      <head><link rel="icon" href="/favicon.ico" sizes="any" />   <Analytics/></head>
-      <body>
-      <div className="min-h-screen bg-black text-white">
+    <head><link rel="icon" href="/favicon.ico" sizes="any" /></head>
+<body
+  className={` antialiased `}
+> 
+
         {children}
-        </div></body>
+       </body>
     </html>
   )
 }

@@ -16,13 +16,15 @@ import { toast } from "@/hooks/use-toast"
 import LoginBoundary from "./test/login-boundary"
 
 
-export function AnimeDetails({animeid,episodeid=null}) {
+export function AnimeDetails({animeid,episodeid=null,setmylistkey}) {
+
   const [btnloading, setbtnloading] = useState(false)
 const addtolist = async ()=>{
 
   setbtnloading(true)
   try{  await axios.post('/api/mylist/add',{id:animedata.id, title:animedata.title, image:animedata.image, currentEpisode: animedata.currentEpisode, totalEpisodes:animedata.totalEpisodes})
 toast({title:'Added to List!'})
+if(setmylistkey) setmylistkey(`mylist${Math.random()}`)
 }catch(e){
   console.log(e)
   toast({title:'Theres some error'})

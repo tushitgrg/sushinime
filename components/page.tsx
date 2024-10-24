@@ -21,6 +21,8 @@ import HistorySection from "./ui/history-section"
 
 
 export default function HomePage() {
+const [mylistkey, setmylistkey] = useState(`mylist${Math.random()}` )
+
 
   const [selectedAnime, setSelectedAnime] = useState(null)
  
@@ -60,7 +62,7 @@ if(!uid){
         <AnimeSection title="Recently Updated"  type='updated' passinganime={false}/>
         <AnimeSection title="Trending"   type='trending' passinganime={false}/>
         <LoginBoundary fallback={null}>
-        <AnimeSection title="My List"   type='MyList' passinganime={false}/>
+        <AnimeSection title="My List" key={mylistkey}  type='MyList' passinganime={false}/>
         <HistorySection/>
         </LoginBoundary>
       {genres.map((genre, index) => (
@@ -84,7 +86,7 @@ if(!uid){
         <AnimeModal
           anime={selectedAnime}
           isOpen={!!selectedAnime}
-        
+        setmylistkey = {setmylistkey}
           onClose={() => {setSelectedAnime(null); 
          
             router.replace('/', {  scroll: false }) 

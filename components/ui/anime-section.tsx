@@ -10,7 +10,7 @@ import { Button } from "./button"
 import { Badge } from "./badge"
 import { fetchDataRedis } from "@/lib/fetchdata"
 
-export const AnimeModal = ({ anime, isOpen, onClose,episodeid=null }) => {
+export const AnimeModal = ({ anime, isOpen, onClose,episodeid=null,setmylistkey=null }) => {
   const [animeid, setanimeid] = useState(anime)
     const [isMuted, setIsMuted] = useState(true)
   
@@ -19,7 +19,7 @@ export const AnimeModal = ({ anime, isOpen, onClose,episodeid=null }) => {
         <DialogTitle></DialogTitle>
         <DialogContent className="max-w-4xl p-0 bg-black text-white border-none h-11/12">
          
-        <AnimeDetails animeid={animeid} episodeid={episodeid}/>
+        <AnimeDetails setmylistkey={setmylistkey} animeid={animeid} episodeid={episodeid}/>
        
         </DialogContent>
       </Dialog>
