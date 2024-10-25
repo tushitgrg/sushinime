@@ -34,7 +34,7 @@ if(!apiUrl) return
     // Cache the new data in Redis with an expiry time (e.g., 1 hour)
 
     try{
-      await redis.set(apiUrl, JSON.stringify(response.data), 'EX', 1800);
+      await redis.set(apiUrl, JSON.stringify(response.data), 'EX', 1200);
     }
     catch(e){
       console.log(e)
