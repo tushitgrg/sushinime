@@ -1,37 +1,28 @@
-// app/api/proxy/route.js
-import { NextResponse } from 'next/server';
+import puppeteer from 'puppeteer';
 
-export async function GET(req) {
-  // Get the media URL from the query parameters
-  const { searchParams } = new URL(req.url);
-  const url = searchParams.get('url');
-console.log(url)
-  if (!url) {
-    return NextResponse.json({ error: 'Missing URL parameter' }, { status: 400 });
-  }
+export async function GET(request) {
+    const url = request.url; // You can pass the URL as a query parameter
 
-  try {
-    // Fetch the media from the external URL
-    const response = await fetch(url);
+    try {
+        const browser = await puppeteer.launch();
+        const page = await browser.newPage();
+        await page.goto(url, { waitUntil: 'networkidle2' });
 
-    if (!response.ok) {
-      throw new Error('Failed to fetch media');
+        // Adjust the selector as needed
+        const imageUrl = await page.evaluate(() => {
+            return document.querySelector('img')?.src; 
+        });
+
+        await browser.close();
+
+        return new Response(JSON.stringify({ imageUrl }), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+        });
+    } catch (error) {
+        return new Response(JSON.stringify({ error: error.message }), {
+            status: 500,
+            headers: { 'Content-Type': 'application/json' },
+        });
     }
-
-    // Get the media content type
-    const contentType = response.headers.get('content-type');
-    
-    // Create a response with the correct content type and media content
-    const mediaBuffer = await response.arrayBuffer();
-    
-    return new NextResponse(Buffer.from(mediaBuffer), {
-      headers: {
-        'Content-Type': contentType,
-        'Cache-Control': 's-maxage=86400, stale-while-revalidate',
-      },
-    });
-  } catch (error) {
-    console.error('Error proxying media:', error);
-    return NextResponse.json({ error: 'Failed to fetch media' }, { status: 500 });
-  }
 }

@@ -98,7 +98,7 @@ useEffect(()=>{
     <div className="group" onClick={()=> router.push(`/watch/${animeid}/${episode.id}`  , {  scroll: false, })}>
       <div className="relative rounded-md overflow-hidden hover:scale-110 cursor-pointer">
         <img
-          src={ episode.image  }
+          src={episode.image}
           alt={episode.title}
           onError={(e)=>e.currentTarget.src='/icon.png'}
           className="w-full aspect-[2/1]  object-cover transition-transform duration-300 group-hover:scale-105"

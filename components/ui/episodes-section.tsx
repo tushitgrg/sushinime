@@ -13,26 +13,32 @@ import {
 import { Skeleton } from './skeleton'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { fetchDataRedis } from '@/lib/fetchdata'
 const EpisodeSection = ({animeid,episodesdata}) => {
     const [episodes,setepisodes] = useState(null)
     const [allepisodes,setallepisodes] = useState(null)
     const [range, setrange] = useState([])
     const [selrange, setselrange] = useState('0')
     const getdata = async ()=>{
-        const response = await axios.get(`https://sushinimeapi.vercel.app/meta/anilist/episodes/${animeid}`)
+      if(!episodesdata || episodesdata.length==0) return
+        const response = await fetchDataRedis(`https://sushinimeapi.vercel.app/meta/anilist/episodes/${animeid}`)
     const copy = [...episodesdata]
+  console.log(copy)
         for(let i =0; i<response.data.length; i++){
+          if(copy[i]){
             if(copy[i].id ==response.data[i].id){
-                copy[i].title = response.data[i].title;
-                copy[i].image = response.data[i].image;
-            }
+              copy[i].title = response.data[i].title;
+              copy[i].image = response.data[i].image;
+          }
+          }
+          
         }
         setallepisodes(copy)
    
     }
     useEffect(()=>{
         getdata()
-            },[animeid])
+            },[animeid,episodesdata])
 
 
 
