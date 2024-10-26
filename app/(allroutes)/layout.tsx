@@ -23,9 +23,9 @@ export const metadata: Metadata = {
     siteName: 'Sushinime',
     images: [
       {
-        url: '/icon.png', 
-        width: 50,
-        height: 50,
+        url: '/preview.png', 
+        width: 1280,
+        height: 720,
         alt: 'Logo Alt Text',
       },
     ],
