@@ -59,8 +59,9 @@ if(!uid){
 
         <div className="container mx-auto px-4">
         <LoginBoundary fallback={null}>
-        <AnimeSection title="My List" key={mylistkey}  type='MyList' passinganime={false}/>
         <HistorySection/>
+        <AnimeSection title="My List" key={mylistkey}  type='MyList' passinganime={false}/>
+      
         </LoginBoundary>
         {/* <AnimeSection title="Continue Watching" animes={animes.slice().reverse()} onclick={()=>setSelectedAnime(123)} type='history' /> */}
         <AnimeSection title="Recently Updated"  type='updated' passinganime={false}/>
