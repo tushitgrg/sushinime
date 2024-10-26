@@ -58,13 +58,14 @@ if(!uid){
       <TrendingCarousel/>
 
         <div className="container mx-auto px-4">
-        {/* <AnimeSection title="Continue Watching" animes={animes.slice().reverse()} onclick={()=>setSelectedAnime(123)} type='history' /> */}
-        <AnimeSection title="Recently Updated"  type='updated' passinganime={false}/>
-        <AnimeSection title="Trending"   type='trending' passinganime={false}/>
         <LoginBoundary fallback={null}>
         <AnimeSection title="My List" key={mylistkey}  type='MyList' passinganime={false}/>
         <HistorySection/>
         </LoginBoundary>
+        {/* <AnimeSection title="Continue Watching" animes={animes.slice().reverse()} onclick={()=>setSelectedAnime(123)} type='history' /> */}
+        <AnimeSection title="Recently Updated"  type='updated' passinganime={false}/>
+        <AnimeSection title="Trending"   type='trending' passinganime={false}/>
+      
       {genres.map((genre, index) => (
             <AnimeSection
               key={`genre${genre}`}
