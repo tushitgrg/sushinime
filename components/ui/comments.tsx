@@ -28,6 +28,7 @@ getdata()
   },[])
   const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault()
+    if(!newComment||newComment.length<=0) return
     try{
       const newc = await axios.post('/api/comments/post',{animeid, episodeid, text:newComment})
   
