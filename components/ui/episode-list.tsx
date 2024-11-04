@@ -24,16 +24,30 @@ const EpisodeListx = ({animeid}) => {
     const getdata = async ()=>{
         const response1 = await fetchDataRedis(`https://sushinimeapi.vercel.app/meta/anilist/info/${animeid}`)
         episodesdata = response1.data.episodes
-        const response = await fetchDataRedis(`https://sushinimeapi.vercel.app/meta/anilist/episodes/${animeid}`)
+        let response = {data:[]}
+      try{
+         response = await fetchDataRedis(`https://sushinimeapi.vercel.app/meta/anilist/episodes/${animeid}`)
+      }catch{
+
+      }
+      
+    
+       
     const copy = [...episodesdata]
-        for(let i =0; i<response.data.length; i++){
-            if(copy[i].id ==response.data[i].id){
-                copy[i].title = response.data[i].title;
-                copy[i].image = response.data[i].image;
-            }
-        }
-        setallepisodes(copy)
-   
+    console.log("Episodes")
+  console.log(copy)
+  if(response.data.length>0){
+    for(let i =0; i<copy.length; i++){
+      if(copy[i]){
+        if(copy[i].id ==response.data[i].id){
+          copy[i].title = response.data[i].title;
+          copy[i].image = response.data[i].image;
+      }
+      }
+      
+    }
+  }
+  setallepisodes(copy)
     }
     useEffect(()=>{
         getdata()
