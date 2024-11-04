@@ -21,18 +21,30 @@ const EpisodeSection = ({animeid,episodesdata}) => {
     const [selrange, setselrange] = useState('0')
     const getdata = async ()=>{
       if(!episodesdata || episodesdata.length==0) return
-        const response = await fetchDataRedis(`https://sushinimeapi.vercel.app/meta/anilist/episodes/${animeid}`)
+      let response = {data:[]}
+      try{
+         response = await fetchDataRedis(`https://sushinimeapi.vercel.app/meta/anilist/episodes/${animeid}`)
+      }catch{
+
+      }
+      
+    
+       
     const copy = [...episodesdata]
+    console.log("Episodes")
   console.log(copy)
-        for(let i =0; i<response.data.length; i++){
-          if(copy[i]){
-            if(copy[i].id ==response.data[i].id){
-              copy[i].title = response.data[i].title;
-              copy[i].image = response.data[i].image;
-          }
-          }
-          
-        }
+  if(response.data.length>0){
+    for(let i =0; i<copy.length; i++){
+      if(copy[i]){
+        if(copy[i].id ==response.data[i].id){
+          copy[i].title = response.data[i].title;
+          copy[i].image = response.data[i].image;
+      }
+      }
+      
+    }
+  }
+       
         setallepisodes(copy)
    
     }
