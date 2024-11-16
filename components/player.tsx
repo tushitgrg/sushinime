@@ -20,6 +20,7 @@ import EpisodeListx from './ui/episode-list'
 
 
 export function AnimePlayer({episodeid,animeid}) {
+  const currentdomain = "http://localhost:3000"
   const router = useRouter()
 const mainref = useRef(null)
 useEffect(() => {
@@ -33,7 +34,7 @@ useEffect(() => {
     }
   }, 0); 
 }, []);
- 
+ const [referrer, setrefferer] = useState()
 const [nextep, setnextep] = useState()
 const [currentepn, setcurrentepn] = useState()
 const [prevep, setprevep] = useState()
@@ -45,14 +46,18 @@ const setCurrentEpisode = (e)=>{
   if(episodeid){
     const getdata = async ()=>{
       const response = await fetchDataRedis(`https://sushinimeapi.vercel.app/meta/anilist/watch/${episodeid}`)
-    
+   
 
     for(let i=0; i<response.data.sources.length; i++){
       if(response.data.sources[i].quality=='default'){
-        setvideosrc((prev)=>({backup:prev.backup, default:response.data.sources[i].url}))
+  const res1 = await fetch(`/api/proxy?referrer=${btoa(response.data.headers.Referer)}` + "&url=" +  btoa(response.data.sources[i].url) )
+  const url  = await res1.blob();
+        setvideosrc((prev)=>({backup:prev.backup, default: URL.createObjectURL(url )}))
       }
       if(response.data.sources[i].quality=='backup'){
-        setvideosrc((prev)=>({default:prev.default, backup:response.data.sources[i].url}))
+        const res1 = await fetch(`/api/proxy?referrer=${btoa(response.data.headers.Referer)}` + "&url=" +  btoa(response.data.sources[i].url) )
+  const url  = await res1.blob();
+        setvideosrc((prev)=>({default:prev.default, backup:URL.createObjectURL(url )}))
   
               }
     }
@@ -124,7 +129,7 @@ getdata()
          <div className='relative'>
          {nextep?<Button variant="secondary" className='absolute z-10 right-8 bottom-32'   onClick={()=> {setCurrentEpisode(nextep)}} > Next <ArrowBigRight/> </Button>:''}     
          {prevep?<Button variant="secondary" className='absolute z-10 left-8 bottom-32'   onClick={()=> {setCurrentEpisode(prevep)}} > Prev <ArrowBigLeft/>  </Button>:''}     
-         <iframe   src={ `https://plyr.link/p/player.html#${btoa(videosrc.default||videosrc.backup)}${localStorage.getItem('uid')?`#uid=${localStorage.getItem('uid')}${episodeid}`:''}` } scrolling="no" frameBorder="0" allowFullScreen={true} title={episodeid} allow="picture-in-picture" className="w-full aspect-video"></iframe>
+         <iframe   src={ `https://plyr.link/p/player.html#${btoa( videosrc.default   ||  videosrc.backup) }${localStorage.getItem('uid')?`#uid=${localStorage.getItem('uid')}${episodeid}`:''}` } scrolling="no" frameBorder="0" allowFullScreen={true} title={episodeid} allow="picture-in-picture" className="w-full aspect-video"></iframe>
          </div>
      
        
