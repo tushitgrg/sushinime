@@ -15,6 +15,7 @@ import Link from 'next/link'
 import CommentSection from './ui/comments'
 import EpisodeSection from './ui/episodes-section'
 import EpisodeListx from './ui/episode-list'
+import VideoWithHLS from './test/hls-player'
 
 
 
@@ -46,16 +47,16 @@ const setCurrentEpisode = (e)=>{
   if(episodeid){
     const getdata = async ()=>{
       const response = await fetchDataRedis(`https://sushinimeapi.vercel.app/meta/anilist/watch/${episodeid}`)
-   
+   setrefferer(response.data.headers.Referer)
 
     for(let i=0; i<response.data.sources.length; i++){
       if(response.data.sources[i].quality=='default'){
 
-        setvideosrc((prev)=>({backup:prev.backup, default: `${currentdomain}/api/proxy-vid?url=${encodeURIComponent( response.data.sources[i].url)}&type=playlist&referrer=${ encodeURIComponent(response.data.headers.Referer)}`}))
+        setvideosrc((prev)=>({backup:prev.backup, default: response.data.sources[i].url}))
       }
       if(response.data.sources[i].quality=='backup'){
        
-        setvideosrc((prev)=>({default:prev.default, backup:`${currentdomain}/api/proxy-vid?url=${encodeURIComponent(response.data.sources[i].url)}&type=playlist&referrer=${encodeURIComponent(response.data.headers.Referer)}`} ))
+        setvideosrc((prev)=>({default:prev.default, backup:response.data.sources[i].url } ))
   
               }
     }
@@ -127,9 +128,9 @@ getdata()
          <div className='relative'>
          {nextep?<Button variant="secondary" className='absolute z-10 right-8 bottom-32'   onClick={()=> {setCurrentEpisode(nextep)}} > Next <ArrowBigRight/> </Button>:''}     
          {prevep?<Button variant="secondary" className='absolute z-10 left-8 bottom-32'   onClick={()=> {setCurrentEpisode(prevep)}} > Prev <ArrowBigLeft/>  </Button>:''}     
-       
-       
-         <iframe   src={ `https://plyr.link/p/player.html#${btoa( videosrc.default   ||  videosrc.backup) }${localStorage.getItem('uid')?`#uid=${localStorage.getItem('uid')}${episodeid}`:''}` } scrolling="no" frameBorder="0" allowFullScreen={true} title={episodeid} allow="picture-in-picture" className="w-full aspect-video"></iframe>
+       {/* <VideoWithHLS source={ `https://m3u8-proxy-six.vercel.app/m3u8-proxy?url=${encodeURIComponent(videosrc.default   ||  videosrc.backup)}&headers=${encodeURIComponent(JSON.stringify({referer:referrer}))}`  }/> */}
+       {/* <VideoWithHLS source={`https://cors.zimjs.com/${videosrc.default   ||  videosrc.backup}`} /> */}
+         <iframe   src={ `https://plyr.link/p/player.html#${btoa( `https://cors.zimjs.com/${videosrc.default   ||  videosrc.backup}` )  }${localStorage.getItem('uid')?`#uid=${localStorage.getItem('uid')}${episodeid}`:''}` } scrolling="no" frameBorder="0" allowFullScreen={true} title={episodeid} allow="picture-in-picture" className="w-full aspect-video"></iframe>
          </div>
      
        

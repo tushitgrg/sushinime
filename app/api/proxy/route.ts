@@ -1,35 +1,47 @@
-import axios from 'axios';
+import httpProxy from "http-proxy";
+import { NextRequest, NextResponse } from "next/server";
+import dotenv from "dotenv";
+import axios from "axios";
+import colors from "colors";
 
-export async function GET(req) {
-    const { searchParams } = new URL(req.url);
-    const targetUrl = atob(searchParams.get('url'));
-const referrer = atob(searchParams.get('referrer'));
+dotenv.config();
+
+const proxy = httpProxy.createProxyServer();
+
+export async function GET(request: NextRequest) {
+    const { searchParams } = new URL(request.url);
+    const targetUrl = searchParams.get("url");
+    const referrer = searchParams.get("referrer") || "";
 
     if (!targetUrl) {
-        return new Response('Missing "url" query parameter', { status: 400 });
-    }
-    if (!referrer) {
-        return new Response('Missing "referrer" query parameter', { status: 400 });
+        return NextResponse.json(
+            { error: "URL parameter is required" },
+            { status: 400 }
+        );
     }
 
     try {
+        // Configure headers for the proxied request
         const response = await axios.get(targetUrl, {
             headers: {
-                Referer: referrer, // Replace with your desired Referer
-                'User-Agent': req.headers.get('user-agent'), // Forward User-Agent
+                Referer: referrer, // Add the referrer header
             },
-            responseType: 'stream', // For streaming large HLS content
+            responseType: "stream", // Stream the response
         });
 
+        // Stream the proxied response back to the client
         return new Response(response.data, {
             status: response.status,
             headers: {
-                'Content-Type': response.headers['content-type'],
-                'Access-Control-Allow-Origin': '*', // Enable CORS
+                "Content-Type": response.headers["content-type"] || "application/octet-stream",
+                "access-control-allow-origin": "*", // Add CORS support
             },
         });
     } catch (error) {
-        console.error('Proxy error:', error.message);
-        return new Response('Failed to fetch the resource', { status: 500 });
+        console.error(colors.red(`Error proxying request: ${error.message}`));
+        return NextResponse.json(
+            { error: "Error proxying the request" },
+            { status: 500 }
+        );
     }
 }
