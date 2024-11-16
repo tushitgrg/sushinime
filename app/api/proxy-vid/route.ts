@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { headers } from 'next/headers';
+
 
 export async function GET(req) {
     const { searchParams } = new URL(req.url);

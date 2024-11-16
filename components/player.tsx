@@ -20,7 +20,7 @@ import EpisodeListx from './ui/episode-list'
 
 
 export function AnimePlayer({episodeid,animeid}) {
-  const currentdomain = "http://localhost:3000"
+  const currentdomain = "https://sushinime.site"
   const router = useRouter()
 const mainref = useRef(null)
 useEffect(() => {
