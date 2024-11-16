@@ -1,11 +1,11 @@
 import axios from 'axios';
 
-
 export async function GET(req) {
     const { searchParams } = new URL(req.url);
     const url = searchParams.get('url'); // The original .m3u8 URL
     const type = searchParams.get('type'); // Determine if it's a playlist or segment
-    const referrer =searchParams.get('referrer');
+    const referrer = searchParams.get('referrer');
+    
     if (!url) {
         return new Response('Missing "url" query parameter', { status: 400 });
     }
@@ -14,12 +14,11 @@ export async function GET(req) {
         if (type === 'playlist') {
             // Proxy the .m3u8 file
             const { data: playlistContent } = await axios.get(url, {
-
                 headers: {
-                    Referer: referrer, // Replace with your desired Referer
-                    'User-Agent': req.headers.get('user-agent'), // Forward User-Agent
+                    Referer: referrer, // Forward the referer header
+                    'User-Agent': req.headers.get('user-agent'), // Forward User-Agent header
                 },
-                responseType: 'text', // For streaming large HLS content
+                responseType: 'text', // For handling large HLS content
             });
 
             // Modify .m3u8 content to point to your proxy for the segments
@@ -39,7 +38,13 @@ export async function GET(req) {
             });
         } else if (type === 'segment') {
             // Proxy the .ts segment
-            const response = await axios.get(url, { responseType: 'stream' });
+            const response = await axios.get(url, {
+                headers: {
+                    Referer: referrer, // Forward the referer header for segment requests
+                },
+                responseType: 'stream',
+            });
+
             return new Response(response.data, {
                 status: response.status,
                 headers: {
@@ -54,10 +59,13 @@ export async function GET(req) {
         }
     } catch (error) {
         console.error('Proxy error:', error.message);
-        return new Response('Failed to proxy the resource', { status: 500 , headers:{
-            'Access-Control-Allow-Origin': '*', // Allow all origins
-            'Access-Control-Allow-Methods': 'GET, POST, OPTIONS', // Allow specific HTTP methods
-            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-        }});
+        return new Response('Failed to proxy the resource', {
+            status: 500,
+            headers: {
+                'Access-Control-Allow-Origin': '*', // Allow all origins
+                'Access-Control-Allow-Methods': 'GET, POST, OPTIONS', // Allow specific HTTP methods
+                'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+            }
+        });
     }
 }
