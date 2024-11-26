@@ -12,7 +12,7 @@ import { motion } from "framer-motion"
       <div className="relative aspect-[2/3] rounded-md overflow-hidden hover:scale-110    cursor-pointer bg-slate-900 " onClick={onClick} >
         <img
           src={anime.image}
-        onError={(e)=>e.currentTarget.src='/icon.png'}
+        onError={(e)=> {e.currentTarget.src=`https://cors.zimjs.com/${e.currentTarget.src}`}}
           
           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
          
