@@ -10,13 +10,14 @@ export async function GET(request: Request) {
         style={{
           display: "flex",
           flexDirection: "column",
-          backgroundColor: "black",
-          color: "white",
+        
+          color: "black",
           width: "100%",
           height: "100%",
           alignItems: "center",
           justifyContent: "center",
         }}
+        tw="bg-white"
       >
         <div
           style={{
@@ -32,8 +33,9 @@ export async function GET(request: Request) {
             style={{
               display: "flex",
               flexDirection: "column",
-              fontSize: "144px",
-              fontWeight: "bold",
+              fontSize: "120px",
+           
+              fontFamily:"sans-serif",
               letterSpacing: "-0.05em",
               textAlign: "center",
               margin: 0,
