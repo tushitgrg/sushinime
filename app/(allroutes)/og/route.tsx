@@ -1,5 +1,5 @@
 import { ImageResponse } from "next/og";
-
+import Image from "next/image";
 export async function GET(request: Request) {
   const url = new URL(request.url);
   const title = url.searchParams.get("title") || "Sushinime";
@@ -16,6 +16,7 @@ export async function GET(request: Request) {
           height: "100%",
           alignItems: "center",
           justifyContent: "center",
+         
         }}
         tw="bg-white"
       >
@@ -27,8 +28,11 @@ export async function GET(request: Request) {
             padding: "48px 16px",
             alignItems: "center",
             justifyContent: "center",
+        
+           backgroundImage: " url('http://localhost/poster.png')"
           }}
         >
+   
           <h1
             style={{
               display: "flex",
@@ -41,6 +45,7 @@ export async function GET(request: Request) {
               margin: 0,
             }}
           >
+
             {title}
           </h1>
         </div>
