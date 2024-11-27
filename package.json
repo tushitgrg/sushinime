@@ -34,6 +34,7 @@
     "dayjs": "^1.11.13",
     "dotenv": "^16.4.5",
     "framer-motion": "^11.11.8",
+    "fs": "^0.0.1-security",
     "hls.js": "^1.5.16",
     "http-proxy": "^1.18.1",
     "ioredis": "^5.4.1",

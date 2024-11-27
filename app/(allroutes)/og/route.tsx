@@ -1,8 +1,22 @@
 import { ImageResponse } from "next/og";
-import Image from "next/image";
+
+async function loadGoogleFont (font: string, text: string) {
+  const url = `https://fonts.googleapis.com/css2?family=${font}&text=${encodeURIComponent(text)}`
+  const css = await (await fetch(url)).text()
+  const resource = css.match(/src: url\((.+)\) format\('(opentype|truetype)'\)/)
+ 
+  if (resource) {
+    const response = await fetch(resource[1])
+    if (response.status == 200) {
+      return await response.arrayBuffer()
+    }
+  }
+ 
+  throw new Error('failed to load font data')
+}
 export async function GET(request: Request) {
   const url = new URL(request.url);
-  const title = url.searchParams.get("title") || "Sushinime";
+  const title = url.searchParams.get("title").toUpperCase() || "Sushinime";
 
   return new ImageResponse(
     (
@@ -11,25 +25,32 @@ export async function GET(request: Request) {
           display: "flex",
           flexDirection: "column",
         
-          color: "black",
+          color: "white",
           width: "100%",
           height: "100%",
           alignItems: "center",
           justifyContent: "center",
-         
+          backgroundImage: " url('https://sushinime.site/poster.png')",
+          backgroundRepeat:'no-repeat',
+          backgroundSize:'100% 100%'
         }}
-        tw="bg-white"
+      
       >
+
         <div
           style={{
             display: "flex",
             flexDirection: "column",
             width: "100%",
-            padding: "48px 16px",
+            padding: "48px 60px",
             alignItems: "center",
             justifyContent: "center",
-        
-           backgroundImage: " url('http://localhost/poster.png')"
+   
+         
+
+          
+       
+
           }}
         >
    
@@ -37,13 +58,15 @@ export async function GET(request: Request) {
             style={{
               display: "flex",
               flexDirection: "column",
-              fontSize: "120px",
+              fontSize: "100px",
            
-              fontFamily:"sans-serif",
-              letterSpacing: "-0.05em",
+           
+              letterSpacing: "0.05em",
               textAlign: "center",
               margin: 0,
+            
             }}
+           
           >
 
             {title}
@@ -52,8 +75,16 @@ export async function GET(request: Request) {
       </div>
     ),
     {
-      width: 800,
-      height: 1200,
+      width: 900,
+      height: 1300,
+      fonts: [
+        {
+          name: "Keania One",
+          data: await loadGoogleFont('Keania One', title),
+          weight: 400,
+          style: "normal",
+        },
+      ],
     }
   );
 }
