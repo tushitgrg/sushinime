@@ -1,6 +1,6 @@
 import HomePage from "@/components/page";
 import { fetchDataRedis } from "@/lib/fetchdata";
-import Image from "next/image";
+import {convert} from 'html-to-text';
 export async function generateMetadata({ searchParams }: { searchParams?: { id?: string } }) {
   console.log("searchParams:", searchParams); // Debug
 
@@ -12,10 +12,10 @@ export async function generateMetadata({ searchParams }: { searchParams?: { id?:
 
     return {
       title: `Watch "${response.data.title.english || response.data.title.romaji}" on Sushinime!`,
-      description: `${response.data.description.slice(0,150)}...`,
+      description: `${convert( response.data.description).slice(0,150)}...`,
       openGraph: {
         title: `Watch "${response.data.title.english || response.data.title.romaji}" on Sushinime!`,
-        description: `${response.data.description.slice(0,150)}...`,
+        description: `${convert( response.data.description).slice(0,150)}...`,
         siteName: 'Sushinime',
         images: [
           {

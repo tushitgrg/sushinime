@@ -18,55 +18,25 @@ import { fetchDataRedis } from "@/lib/fetchdata";
 
 
 
-export async function generateMetadata({ searchParams }: { searchParams?: { id?: string } }) {
-  console.log("searchParams:", searchParams); // Debug
-
-  const id = searchParams?.id;
-
-  if (id) {
-
-    const response = await fetchDataRedis(`https://sushinimeapi.vercel.app/meta/anilist/info/${id}`);
-
-    return {
-      title: `Anime - ${response.data.title.english || response.data.title.romaji}`,
-      description: response.data.description,
-      openGraph: {
-        title: `Anime - ${response.data.title.english || response.data.title.romaji}`,
-        description: response.data.description,
-        siteName: 'Sushinime',
-        images: [
-          {
-            url: response.data.cover || '/default-preview.png',
-            width: 1280,
-            height: 720,
-            alt: response.data.title.english || response.data.title.romaji || 'Default Alt Text',
-          },
-        ],
-        type: 'website',
+export const metadata: Metadata = {
+  title: "Sushinime",
+  description: "Watch Anime for free",
+  openGraph: {
+    title: "Sushinime",
+    description: "Watch Anime for free",
+    siteName: 'Sushinime',
+    images: [
+      {
+        url: '/preview.png', 
+        width: 1280,
+        height: 720,
+        alt: 'Logo Alt Text',
       },
-    };
-  }
+    ],
+    type: 'website',
 
-  // Default metadata
-  return {
-    title: 'Sushinime',
-    description: 'Watch Anime for free',
-    openGraph: {
-      title: 'Sushinime',
-      description: 'Watch Anime for free',
-      siteName: 'Sushinime',
-      images: [
-        {
-          url: '/preview.png',
-          width: 1280,
-          height: 720,
-          alt: 'Logo Alt Text',
-        },
-      ],
-      type: 'website',
-    },
-  };
-}
+  }
+}; 
 
 
 

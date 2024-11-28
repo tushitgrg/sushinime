@@ -1,5 +1,5 @@
 import { fetchDataRedis } from "@/lib/fetchdata";
-
+import {convert} from 'html-to-text';
 export async function generateMetadata({ params }: { params: { animeid: string } }) {
     const { animeid } =  params;
   
@@ -11,10 +11,10 @@ export async function generateMetadata({ params }: { params: { animeid: string }
 
     return {
       title: `Watch "${response.data.title.english || response.data.title.romaji}" on Sushinime!`,
-      description: `${response.data.description.slice(0,150)}...`,
+      description: `${convert( response.data.description).slice(0,150)}...`,
       openGraph: {
         title: `Watch "${response.data.title.english || response.data.title.romaji}" on Sushinime!`,
-        description: `${response.data.description.slice(0,150)}...`,
+        description: `${convert( response.data.description).slice(0,150)}...`,
         siteName: 'Sushinime',
         images: [
           {
