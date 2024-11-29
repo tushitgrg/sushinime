@@ -20,6 +20,7 @@ const EpisodeListx = ({animeid}) => {
     const [allepisodes,setallepisodes] = useState(null)
     const [range, setrange] = useState([])
     const [selrange, setselrange] = useState('0')
+    const [fillereps, setfillereps] = useState([]);
     let episodesdata=[];
     const getdata = async ()=>{
         const response1 = await fetchDataRedis(`https://sushinimeapi.vercel.app/meta/anilist/info/${animeid}`)
@@ -30,12 +31,14 @@ const EpisodeListx = ({animeid}) => {
       }catch{
 
       }
-      
-    
+      const animename = response1.data.title.romaji.replaceAll(" ","-").replaceAll(":","-") || response1.data.title.english.replaceAll(" ","-").replaceAll(":","-")
+const response4 = await axios.get(`https://filler-list.chaiwala-anime.workers.dev/${encodeURIComponent(animename)}`)
+console.log(``)
+      setfillereps(response4.data.fillerEpisodes);
+    console.log("fillers", response4.data.fillerEpisodes)
        
     const copy = [...episodesdata]
-    console.log("Episodes")
-  console.log(copy)
+
   if(response.data.length>0){
     for(let i =0; i<copy.length; i++){
       if(copy[i]){
@@ -101,7 +104,7 @@ useEffect(()=>{
 
 <ScrollArea className='w-full h-screen'>
     <div className=" grid lg:grid-cols-2 grid-cols-2 md:grid-cols-2 gap-4 "> 
-        {episodes.map((episode) => (
+        {episodes.map((episode, i) => (
   <motion.div
     key={episode.id}
     initial={{ opacity: 0, scale: 0.9 }}
@@ -119,6 +122,7 @@ useEffect(()=>{
         />
       
         <Badge className='absolute top-2 left-2'>{episode.number}</Badge>
+      {fillereps.includes(episode.number)? <Badge className='absolute top-2 right-2' variant='secondary'>Filler</Badge>:''} 
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent group-hover:opacity-100 opacity-0 transition-opacity duration-300"></div>
       
       </div>
