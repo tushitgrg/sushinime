@@ -14,16 +14,21 @@ if(!apiUrl) return
   
   try {
 
-    
+    try{
       const cachedData = await redis.get(apiUrl);
-   
-
       if (cachedData) {
         console.log('Returning cached data');
   
       return  NextResponse.json(JSON.parse(cachedData))
       // Return cached data
       }
+    }catch{
+      
+    }
+     
+   
+
+     
     
     
 
