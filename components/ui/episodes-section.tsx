@@ -14,6 +14,7 @@ import { Skeleton } from './skeleton'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { fetchDataRedis } from '@/lib/fetchdata'
+
 const EpisodeSection = ({animeid,episodesdata}) => {
     const [episodes,setepisodes] = useState(null)
     const [allepisodes,setallepisodes] = useState(null)
@@ -118,6 +119,7 @@ useEffect(()=>{
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent group-hover:opacity-100 opacity-0 transition-opacity duration-300"></div>
         <div className="absolute bottom-0 left-0 p-4 group-hover:opacity-100 opacity-0 transition-opacity duration-300">
           <h3 className="text-lg font-semibold">{episode.title}</h3>
+         
         </div>
       </div>
       <div className="group-hover:opacity-0 opacity-100">

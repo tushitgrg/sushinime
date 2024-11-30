@@ -12,6 +12,7 @@ import { fetchDataRedis } from "@/lib/fetchdata"
 
 
 
+
   
 export const HistorySection = ({ title="Continue Watching" }) =>{
   const scrollContainerRef = useRef(null);
@@ -70,12 +71,12 @@ export const HistorySection = ({ title="Continue Watching" }) =>{
     
       
     { animedata ? <> {animedata.length>0 ? animedata.map((anime, index) => (
-     
+  
        <AnimeCard key={index} anime={JSON.parse(anime.anime)} onClick={()=> {
 
 
     
-        router.push(`/watch/${anime.animeid}/${anime.episodeid}`);
+         router.push(`/watch/${anime.animeid}/${anime.episodeid}`);
      
       
   

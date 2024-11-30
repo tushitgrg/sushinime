@@ -16,6 +16,7 @@ import CommentSection from './ui/comments'
 import EpisodeSection from './ui/episodes-section'
 import EpisodeListx from './ui/episode-list'
 import VideoWithHLS from './test/hls-player'
+import { Switch } from './ui/switch'
 
 
 
@@ -42,10 +43,14 @@ const [prevep, setprevep] = useState()
 const setCurrentEpisode = (e)=>{
   router.push(`/watch/${animeid}/${e}`)
 }
+const [currentvid, setcurrentvid] =  useState({default:null, backup:null});
   const [videosrc, setvideosrc] = useState({default:null, backup:null})
- 
+  const [dubvideosrc, setdubvideosrc] = useState({default:null, backup:null})
+  const [dub, setdub] = useState(false);
   if(episodeid){
+    // setdub(episodeid.includes("dub"));
     const getdata = async ()=>{
+     
       const response = await fetchDataRedis(`https://sushinimeapi.vercel.app/meta/anilist/watch/${episodeid}`)
    setrefferer(response.data.headers.Referer)
 
@@ -60,7 +65,19 @@ const setCurrentEpisode = (e)=>{
   
               }
     }
+    const response1 = await fetchDataRedis(`https://sushinimeapi.vercel.app/meta/anilist/watch/${episodeid.replace("-episode","-dub-episode")}`);
+    console.log(`https://sushinimeapi.vercel.app/meta/anilist/watch/${episodeid.replace("-episode","-dub-episode")}`)
+    for(let i=0; i<response1.data.sources.length; i++){
+      if(response1.data.sources[i].quality=='default'){
 
+        setdubvideosrc((prev)=>({backup:prev.backup, default: response1.data.sources[i].url}))
+      }
+      if(response1.data.sources[i].quality=='backup'){
+       
+        setdubvideosrc((prev)=>({default:prev.default, backup:response1.data.sources[i].url } ))
+  
+              }
+    }
     
   
   }
@@ -69,7 +86,15 @@ const setCurrentEpisode = (e)=>{
   },[episodeid])
   }
  
+useEffect(()=>{
+if(dub){
+  setcurrentvid({default: dubvideosrc.default, backup:dubvideosrc.backup});
+}else{
+  console.log(currentvid)
+  setcurrentvid({default: videosrc.default, backup:videosrc.backup});
+}
 
+},[dub,videosrc,dubvideosrc])
 
   const [animedata,setanimedata] = useState(null)
 
@@ -114,7 +139,7 @@ getdata()
    
   return (
     <div className='' ref={mainref}>
-   {animedata && ( videosrc.backup||videosrc.default) ?  <div className="flex flex-col  bg-black text-white">
+   {animedata && ( currentvid.backup||currentvid.default) ?  <div className="flex flex-col  bg-black text-white">
   
 
 
@@ -130,15 +155,25 @@ getdata()
          {prevep?<Button variant="secondary" className='absolute z-10 left-8 bottom-32'   onClick={()=> {setCurrentEpisode(prevep)}} > Prev <ArrowBigLeft/>  </Button>:''}     
        {/* <VideoWithHLS source={ `https://m3u8-proxy-six.vercel.app/m3u8-proxy?url=${encodeURIComponent(videosrc.default   ||  videosrc.backup)}&headers=${encodeURIComponent(JSON.stringify({referer:referrer}))}`  }/> */}
        {/* <VideoWithHLS source={`https://cors.zimjs.com/${videosrc.default   ||  videosrc.backup}`} /> */}
-         <iframe   src={ `https://plyr.link/p/player.html#${btoa( `https://cors.zimjs.com/${videosrc.default   ||  videosrc.backup}` )  }${localStorage.getItem('uid')?`#uid=${localStorage.getItem('uid')}${episodeid}`:''}` } scrolling="no" frameBorder="0" allowFullScreen={true} title={episodeid} allow="picture-in-picture" className="w-full aspect-video"></iframe>
+         <iframe   src={ `https://plyr.link/p/player.html#${btoa( `https://cors.zimjs.com/${currentvid.default   ||  currentvid.backup}` )  }${localStorage.getItem('uid')?`#uid=${localStorage.getItem('uid')}${episodeid}`:''}` } scrolling="no" frameBorder="0" allowFullScreen={true} title={episodeid} allow="picture-in-picture" className="w-full aspect-video"></iframe>
          </div>
      
        
            
     
-        <div className="flex p-6">
+        <div className="flex items-center justify-between p-6">
           <h2 className="text-xl  sm:text-2xl font-bold">  {animedata.title.english || animedata.title.romaji} Episode {currentepn} </h2>
-       
+         {dubvideosrc.backup||dubvideosrc.default? <div className='flex items-center gap-3'>
+          <Switch
+                      checked={dub}
+                      onCheckedChange={()=>{
+                        setdub((prev)=>!prev)
+                      }}
+                    />
+                    Dub
+          </div>:''}
+         
+         
         </div>
         <CommentSection animeid={animeid} episodeid={episodeid}/>
     
