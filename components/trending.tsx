@@ -63,7 +63,11 @@ useEffect(() => {
       <main className="pt-20">
    
 
-      { animedata  ? <div>  {animedata.length>0?<div>
+      { animedata  ? <div> 
+        
+        
+         {animedata.length>0?<div className="">
+          <h1 className="text-4xl font-bold mb-8 ml-8">Watch What's Trending!</h1>
        <AnimeSection title="" passinganime={true} type={animedata.slice(0,7)}/> 
        
     {animedata.slice(7,14).length>0?<AnimeSection title="" passinganime={true} type={animedata.slice(7,14)}/> :''}  
