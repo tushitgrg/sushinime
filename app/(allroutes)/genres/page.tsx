@@ -37,7 +37,7 @@ export default function GenresPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
-              <Link href={`/genres/${genre.name}`} className="block group">
+              <Link href={`/genres/${encodeURIComponent( genre.name)}`} className="block group">
                 <div className="relative aspect-[3/4] rounded-lg overflow-hidden">
                   <img  onError={(e)=>e.currentTarget.src='/icon.png'}
                     src={genre.image}

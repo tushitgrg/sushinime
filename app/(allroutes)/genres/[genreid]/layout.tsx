@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: { params: { genreid: string }
  if (genreid) {
     
   
-
+console.log(genreid)
     return {
       title: `Explore '${genreid}' at Sushinime!`,
       description: `Watch anime at Sushinime for free!`,
@@ -32,7 +32,7 @@ export async function generateMetadata({ params }: { params: { genreid: string }
         siteName: 'Sushinime',
         images: [
           {
-            url: genres.filter((e)=>e.name==genreid)[0].image || '/preview.png',
+            url: genres.filter((e)=>encodeURIComponent(e.name)==genreid)[0].image || '/preview.png',
             width: 1280,
             height: 720,
             alt: genreid|| 'Image Cover',

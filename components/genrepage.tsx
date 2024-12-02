@@ -61,7 +61,7 @@ useEffect(() => {
     
 
       <main className="pt-20">
-      <h2 className="text-2xl text-center font-bold mb-4">{genre}</h2>
+      <h2 className="text-2xl text-center font-bold mb-4">{genre.replaceAll("%20"," ")}</h2>
 
       { animedata  ? <div>  {animedata.length>0?<div>
        <AnimeSection title="" passinganime={true} type={animedata.slice(0,7)}/> 
