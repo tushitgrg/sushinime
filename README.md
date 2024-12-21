@@ -1,36 +1,32 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Sushinime, Netflix Inspired Anime streaming Platform
+### Sushinime is a netflix inspired, new gen anime streaming platform. 
 
-## Getting Started
+## Short Description:-
 
-First, run the development server:
+Ad free Anime streaming, bug and ad free experience. Has most features that netflix have. Login and history features also added. Fast loading speed due to caching and redis. UI built from complete scratch.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Tech Stack:- Nextjs, Postgres, Redis
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+This is how a sample env will look:-
+REDIS_URL  =
+GOOGLE_CLIENT_ID  =
+NEXTAUTH_URL  =
+NEXTAUTH_SECRET  =
+DATABASE_URL  =
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Please replace sushinimeapi.vercel.app to your own consumet api. 
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Screenshots:-
+![enter image description here](https://github.com/tushitgrg/sushinime/blob/main/public/screenshots/sc4.png?raw=true)
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+![enter image description here](https://github.com/tushitgrg/sushinime/blob/main/public/screenshots/sc5.png?raw=true)
+![enter image description here](https://github.com/tushitgrg/sushinime/blob/main/public/screenshots/sc6.png?raw=true)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+![enter image description here](https://github.com/tushitgrg/sushinime/blob/main/public/screenshots/sc7.png?raw=true)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+![enter image description here](https://github.com/tushitgrg/sushinime/blob/main/public/screenshots/sc8.png?raw=true)
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+![enter image description here](https://github.com/tushitgrg/sushinime/blob/main/public/screenshots/sc9.png?raw=true)
+![enter image description here](https://github.com/tushitgrg/sushinime/blob/main/public/screenshots/sc2.png?raw=true)![enter image description here](https://github.com/tushitgrg/sushinime/blob/main/public/screenshots/sc3.png?raw=true)
+![enter image description here](https://github.com/tushitgrg/sushinime/blob/main/public/screenshots/sc1.png?raw=true)
