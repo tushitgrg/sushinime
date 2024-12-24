@@ -2,17 +2,20 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { Button } from "@/components/ui/button"
-
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import {  ArrowBigLeft, ArrowBigRight, House, Menu } from "lucide-react"
 
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
-
+import { Skeleton } from './ui/skeleton'
 import { fetchDataRedis } from '@/lib/fetchdata'
 import Image from 'next/image'
-
+import Link from 'next/link'
 import CommentSection from './ui/comments'
-
+import EpisodeSection from './ui/episodes-section'
+import EpisodeListx from './ui/episode-list'
+import VideoWithHLS from './test/hls-player'
 import { Switch } from './ui/switch'
 
 
@@ -48,30 +51,30 @@ const [currentvid, setcurrentvid] =  useState({default:null, backup:null});
     // setdub(episodeid.includes("dub"));
     const getdata = async ()=>{
      
-      const response = await fetchDataRedis(`https://sushinimeapi.vercel.app/anime/gogoanime/servers/${episodeid}`)
-  
+      const response = await fetchDataRedis(`https://sushinimeapi.vercel.app/meta/anilist/watch/${episodeid}`)
+   setrefferer(response.data.headers.Referer)
 
-    for(let i=0; i<response.data.length; i++){
-      if(response.data[i].name=='Vidstreaming'){
+    for(let i=0; i<response.data.sources.length; i++){
+      if(response.data.sources[i].quality=='default'){
 
-        setvideosrc((prev)=>({backup:prev.backup, default: response.data[i].url}))
+        setvideosrc((prev)=>({backup:prev.backup, default: response.data.sources[i].url}))
       }
-      if(response.data[i].name=='Gogo server'){
+      if(response.data.sources[i].quality=='backup'){
        
-        setvideosrc((prev)=>({default:prev.default, backup:response.data[i].url } ))
+        setvideosrc((prev)=>({default:prev.default, backup:response.data.sources[i].url } ))
   
               }
     }
     const response1 = await fetchDataRedis(`https://sushinimeapi.vercel.app/meta/anilist/watch/${episodeid.replace("-episode","-dub-episode")}`);
     console.log(`https://sushinimeapi.vercel.app/meta/anilist/watch/${episodeid.replace("-episode","-dub-episode")}`)
-    for(let i=0; i<response1.data.length; i++){
-      if(response1.data[i].name=='Vidstreaming'){
+    for(let i=0; i<response1.data.sources.length; i++){
+      if(response1.data.sources[i].quality=='default'){
 
-        setvideosrc((prev)=>({backup:prev.backup, default: response1.data[i].url}))
+        setdubvideosrc((prev)=>({backup:prev.backup, default: response1.data.sources[i].url}))
       }
-      if(response1.data[i].name=='Gogo server'){
+      if(response1.data.sources[i].quality=='backup'){
        
-        setvideosrc((prev)=>({default:prev.default, backup:response1.data[i].url } ))
+        setdubvideosrc((prev)=>({default:prev.default, backup:response1.data.sources[i].url } ))
   
               }
     }
@@ -150,11 +153,9 @@ getdata()
          <div className='relative'>
          {nextep?<Button variant="secondary" className='absolute z-10 right-8 bottom-32'   onClick={()=> {setCurrentEpisode(nextep)}} > Next <ArrowBigRight/> </Button>:''}     
          {prevep?<Button variant="secondary" className='absolute z-10 left-8 bottom-32'   onClick={()=> {setCurrentEpisode(prevep)}} > Prev <ArrowBigLeft/>  </Button>:''}     
-       {/* <VideoWithHLS source={ `https://m3u8-proxy-six.vercel.app/m3u8-proxy?url=${encodeURIComponent(videosrc.default   ||  videosrc.backup)}&headers=${encodeURIComponent(JSON.stringify({referer:referrer}))}`  }/> */}
+       {/* <VideoWithHLS source={ `https://m3-u8-proxy2-two.vercel.app/m3u8-proxy?url=${encodeURIComponent(videosrc.default   ||  videosrc.backup)}&headers=${encodeURIComponent(JSON.stringify({referer:referrer}))}`  }/> */}
        {/* <VideoWithHLS source={`https://cors.zimjs.com/${videosrc.default   ||  videosrc.backup}`} /> */}
-         {/* <iframe   src={ `https://plyr.link/p/player.html#${btoa( `https://cors.zimjs.com/${currentvid.default   ||  currentvid.backup}` )  }${localStorage.getItem('uid')?`#uid=${localStorage.getItem('uid')}${episodeid}`:''}` } scrolling="no" frameBorder="0" allowFullScreen={true} title={episodeid} allow="picture-in-picture" className="w-full aspect-video"></iframe> */}
-         <iframe   src={ currentvid.default||currentvid.backup } scrolling="no" frameBorder="0" allowFullScreen={true} title={episodeid} allow="picture-in-picture" className="w-full aspect-video"></iframe>
-
+         <iframe   src={ `https://cozy-cocada-fc32ca.netlify.app#${btoa( `https://m3-u8-proxy2-two.vercel.app/m3u8-proxy?url=${currentvid.default   ||  currentvid.backup}` )  }${localStorage.getItem('uid')?`#uid=${localStorage.getItem('uid')}${episodeid}`:''}` } scrolling="no" frameBorder="0" allowFullScreen={true} title={episodeid} allow="picture-in-picture" className="w-full aspect-video"></iframe>
          </div>
      
        
