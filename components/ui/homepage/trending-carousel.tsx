@@ -74,7 +74,8 @@ const router = useRouter()
         transition={{ duration: 0.8, delay: 0.2 }}
         className="text-xl"
       >
-        { trendin[current].description.replace(/<[^>]+>/g, '').slice(0,100)}...
+
+        {trendin[current].description ? <> {trendin[current].description.replace(/<[^>]+>/g, '').slice(0,100)}... </>:''}
       </motion.p>
       <motion.p 
         initial={{ opacity: 0, y: 20 }}
