@@ -55,8 +55,11 @@ export default function RootLayout({
       >   <Toaster />
         <Analytics/> 
         <div className="min-h-screen bg-black text-white">
+       
          <header className={`fixed top-0 w-full z-50 transition-all duration-500  bg-black`}>
+         <div className="text-center py-2 bg-red-400 text-black">The Website is in the maintenance mode, Some Features might not work as expected, Sorry for inconvenience</div>
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+
          <div className="flex  sm:block md:hidden items-center ">     
         <Sheet >
       <SheetTrigger asChild>

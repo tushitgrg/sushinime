@@ -2,20 +2,14 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { Button } from "@/components/ui/button"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import {  ArrowBigLeft, ArrowBigRight, House, Menu } from "lucide-react"
+import {  ArrowBigLeft, ArrowBigRight,  } from "lucide-react"
 
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
-import { Skeleton } from './ui/skeleton'
 import { fetchDataRedis } from '@/lib/fetchdata'
 import Image from 'next/image'
-import Link from 'next/link'
 import CommentSection from './ui/comments'
-import EpisodeSection from './ui/episodes-section'
-import EpisodeListx from './ui/episode-list'
-import VideoWithHLS from './test/hls-player'
+
 import { Switch } from './ui/switch'
 
 
